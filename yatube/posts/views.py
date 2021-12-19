@@ -154,7 +154,7 @@ def profile_follow(request, username):
         if not Follow.objects.filter(
                 user=request.user,
                 author=author,
-            ).exists():
+        ).exists():
             Follow.objects.create(
                 user=request.user,
                 author=author
