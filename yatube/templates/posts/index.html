@@ -1,7 +1,6 @@
 <!-- templates/posts/index.html -->
 {% extends 'base.html' %}
 {% load cache %}
-{% load thumbnail %}
 {% block title %}
   {{ title }}
 {% endblock %}
@@ -11,7 +10,13 @@
         <h1>Последние обновления на сайте</h1>
         {% include 'posts/includes/switcher.html' %}
         {% cache 20 index_page page_obj.number %}
-        {% include 'posts/includes/post_list.html' %}
+          {% for post in page_obj %}
+            {% include 'posts/includes/post_list.html' %}
+            {% if post.group.slug %}
+              <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+            {% endif %}
+            {% if not forloop.last %}<hr>{% endif %}
+          {% endfor %}
         {% endcache %}
         {% include 'posts/includes/paginator.html' %}
       </div>
