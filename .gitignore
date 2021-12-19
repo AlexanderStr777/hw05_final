@@ -150,3 +150,10 @@ static/
 yatube/posts/static/
 yatube/media/
 
+# Модуль coverage
+
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover 

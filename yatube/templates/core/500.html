@@ -1,0 +1,8 @@
+# templates/core/500.html
+{% extends "base.html" %}
+{% block title %}Custom 500{% endblock %}
+{% block content %}
+  <h1>500 Internal Server Error</h1>
+  <p>На страницы с адресом {{ path }} возникла непредвиденная ошибка. Пожалуйста, сообщите о ней администратору сайта</p>
+  <a href="{% url 'posts:index' %}"> Идите на главную</a>
+{% endblock %} 

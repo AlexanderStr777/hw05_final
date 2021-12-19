@@ -1,0 +1,15 @@
+<!-- templates/posts/index.html -->
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %}
+  {{ title }}
+{% endblock %}
+{% block content %}
+  <!-- класс py-5 создает отступы сверху и снизу блока -->
+      <div class="container py-5">     
+        <h1>{{ title }}</h1>
+        {% include 'posts/includes/switcher.html' %}
+        {% include 'posts/includes/post_list.html' %}
+        {% include 'posts/includes/paginator.html' %}
+      </div>
+{% endblock %}
