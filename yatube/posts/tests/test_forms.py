@@ -23,6 +23,18 @@ TEST_POST_TEXT_UPDATE = 'Test text 1 Update'
 TEST_POST_TEXT_2 = 'Test text 2'
 TEST_POST_IMG_URL = 'posts/small.gif'
 TEST_COMMENT = 'Test comment'
+TEST_IMG = (
+    b'\x47\x49\x46\x38\x39\x61\x01\x00'
+    b'\x01\x00\x00\x00\x00\x21\xf9\x04'
+    b'\x01\x0a\x00\x01\x00\x2c\x00\x00'
+    b'\x00\x00\x01\x00\x01\x00\x00\x02'
+    b'\x02\x4c\x01\x00\x3b'
+)
+TEST_IMAGE_UPLOADE = SimpleUploadedFile(
+    name='small.gif',
+    content=TEST_IMG,
+    content_type='image/gif'
+)
 
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
@@ -55,22 +67,10 @@ class PostFormTest(TestCase):
     def test_create_post(self):
         """Проверка работы формы создания поста"""
         posts_count = Post.objects.count()
-        small_gif = (
-            b'\x47\x49\x46\x38\x39\x61\x01\x00'
-            b'\x01\x00\x00\x00\x00\x21\xf9\x04'
-            b'\x01\x0a\x00\x01\x00\x2c\x00\x00'
-            b'\x00\x00\x01\x00\x01\x00\x00\x02'
-            b'\x02\x4c\x01\x00\x3b'
-        )
-        uploaded = SimpleUploadedFile(
-            name='small.gif',
-            content=small_gif,
-            content_type='image/gif'
-        )
         form_data = {
             'text': TEST_POST_TEXT_2,
             'group': PostFormTest.group_1.id,
-            'image': uploaded
+            'image': TEST_IMAGE_UPLOADE
         }
         self.authorized_client.post(
             reverse(POST_CREATE_URL),

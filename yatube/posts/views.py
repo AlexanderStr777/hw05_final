@@ -31,7 +31,7 @@ def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
 
     post_list = group.group.all()
-    paginator = Paginator(post_list, 10)
+    paginator = Paginator(post_list, settings.PAGINATOR_VALUE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

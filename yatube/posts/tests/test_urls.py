@@ -44,7 +44,7 @@ class PostURLTests(TestCase):
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_unexisting_page(self):
-        '''Проверка ответа несуществующей страницы'''
+        """Проверка ответа несуществующей страницы"""
         response = self.client.get('/unexisting_page/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 

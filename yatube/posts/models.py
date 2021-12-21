@@ -1,5 +1,6 @@
 # posts/models.py
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
 
 User = get_user_model()
@@ -19,7 +20,7 @@ class Group(models.Model):
 
 
 class Post(models.Model):
-    text = models.TextField('Содержание')
+    text = models.TextField('Содержание', help_text='Содержание поста')
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
     author = models.ForeignKey(
         User,
@@ -66,6 +67,8 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ('-created',)
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
     def __str__(self):
         return f'Комментарий пользователя {self.author}: {self.text[:15]}'
@@ -75,10 +78,31 @@ class Follow(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='follower'
+        related_name='follower',
+        verbose_name='Подписчик'
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following'
+        related_name='following',
+        verbose_name='Автор'
     )
+
+    def save(self, *args, **kwargs):
+        existing = Follow.objects.filter(
+            user=self.user,
+            author=self.author
+        ).exists()
+        if self.user == self.author:
+            raise ValidationError('Нельзя подписаться на самого себя')
+        if existing:
+            raise ValidationError('Такая подписка уже существует')
+        super(Follow, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return (f'подписка пользователя {self.user} '
+                f'на пользователя {self.author}')
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
